@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sep14th. - Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            overflow-x: hidden;
+            background: #000;
+            color: #fff;
+        }
+
+        /* Background with image */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1528164344705-47542687000d?w=1920') center/cover no-repeat;
+            filter: grayscale(100%) brightness(0.3);
+            z-index: -2;
+        }
+
+        .background::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(184, 111, 255, 0.15) 0%, rgba(0, 0, 0, 0.8) 100%);
+        }
+
+        /* Overlay gradient */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+            z-index: -1;
+        }
+
+        /* Snow Effect */
+        .snowflake {
+            position: fixed;
+            top: -10px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1em;
+            font-family: Arial, sans-serif;
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+            z-index: 1000;
+            pointer-events: none;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            z-index: 1;
+        }
+
+        /* Avatar Section */
+        .avatar-section {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+
+        .avatar {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            border: 4px solid #b86fff;
+            box-shadow: 
+                0 0 0 4px rgba(184, 111, 255, 0.3),
+                0 0 0 8px rgba(167, 74, 255, 0.2),
+                0 0 0 12px rgba(155, 95, 217, 0.1),
+                0 0 40px rgba(184, 111, 255, 0.8),
+                0 0 80px rgba(184, 111, 255, 0.4),
+                0 15px 50px rgba(0, 0, 0, 0.6),
+                inset 0 0 20px rgba(184, 111, 255, 0.2);
+            object-fit: cover;
+            animation: avatar3D 5s ease-in-out infinite;
+            transform-style: preserve-3d;
+            position: relative;
+        }
+
+        @keyframes avatar3D {
+            0%, 100% { 
+                transform: translateY(0px) scale(1);
+                box-shadow: 
+                    0 0 0 3px rgba(184, 111, 255, 0.3),
+                    0 0 0 6px rgba(167, 74, 255, 0.2),
+                    0 0 0 9px rgba(155, 95, 217, 0.1),
+                    0 0 40px rgba(184, 111, 255, 0.7),
+                    0 0 80px rgba(184, 111, 255, 0.3),
+                    0 10px 40px rgba(0, 0, 0, 0.5),
+                    inset 0 0 20px rgba(184, 111, 255, 0.2);
+            }
+            50% { 
+                transform: translateY(-10px) scale(1.05);
+                box-shadow: 
+                    0 0 0 4px rgba(184, 111, 255, 0.4),
+                    0 0 0 8px rgba(167, 74, 255, 0.3),
+                    0 0 0 12px rgba(155, 95, 217, 0.2),
+                    0 0 50px rgba(184, 111, 255, 0.9),
+                    0 0 100px rgba(184, 111, 255, 0.5),
+                    0 20px 60px rgba(0, 0, 0, 0.6),
+                    inset 0 0 25px rgba(184, 111, 255, 0.3);
+            }
+        }
+
+        .halo {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90px;
+            height: 18px;
+            border: 2.5px solid rgba(255, 215, 0, 0.7);
+            border-radius: 50%;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+            animation: haloFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes haloFloat {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        .wings {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 35px;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.6));
+        }
+
+        .wing-left { 
+            left: -45px;
+            animation: wingFlap 2s ease-in-out infinite;
+        }
+        
+        .wing-right { 
+            right: -45px;
+            animation: wingFlap 2s ease-in-out infinite;
+            animation-delay: 0.1s;
+        }
+
+        @keyframes wingFlap {
+            0%, 100% { transform: translateY(-50%) scale(1); }
+            50% { transform: translateY(-50%) scale(1.1); }
+        }
+
+        .sparkles {
+            position: absolute;
+            font-size: 18px;
+            color: #b86fff;
+            filter: drop-shadow(0 0 8px rgba(184, 111, 255, 0.8));
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        .sparkle-1 { top: 5px; right: 5px; animation-delay: 0s; }
+        .sparkle-2 { bottom: 5px; left: 5px; animation-delay: 0.7s; }
+        .sparkle-3 { top: 50%; right: -25px; animation-delay: 1.4s; }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0.3) rotate(0deg); }
+            50% { opacity: 1; transform: scale(1.3) rotate(180deg); }
+        }
+
+        /* Username with 3D effect */
+        .username {
+            font-size: 48px;
+            font-weight: 700;
+            color: #b86fff;
+            text-shadow: 
+                2px 2px 0 #9b5fd9,
+                4px 4px 0 #8a4ec8,
+                6px 6px 0 #7a3db7,
+                8px 8px 0 #6a2ca6,
+                10px 10px 20px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(184, 111, 255, 1),
+                0 0 60px rgba(184, 111, 255, 0.6);
+            letter-spacing: 3px;
+            margin-bottom: 25px;
+            animation: text3D 6s ease-in-out infinite;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        @keyframes text3D {
+            0%, 100% { 
+                transform: translateY(0px) rotateX(0deg);
+                text-shadow: 
+                    1px 1px 0 #9b5fd9,
+                    2px 2px 0 #8a4ec8,
+                    3px 3px 0 #7a3db7,
+                    4px 4px 0 #6a2ca6,
+                    5px 5px 15px rgba(0, 0, 0, 0.4),
+                    0 0 30px rgba(184, 111, 255, 0.8),
+                    0 0 60px rgba(184, 111, 255, 0.4);
+            }
+            50% { 
+                transform: translateY(-8px) rotateX(2deg);
+                text-shadow: 
+                    1px 2px 0 #9b5fd9,
+                    2px 4px 0 #8a4ec8,
+                    3px 6px 0 #7a3db7,
+                    4px 8px 0 #6a2ca6,
+                    5px 10px 20px rgba(0, 0, 0, 0.5),
+                    0 0 40px rgba(184, 111, 255, 1),
+                    0 0 80px rgba(184, 111, 255, 0.6);
+            }
+        }
+
+        /* Status Box */
+        .status-box {
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(184, 111, 255, 0.3);
+            border-radius: 25px;
+            padding: 18px 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 45px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.5),
+                0 0 20px rgba(184, 111, 255, 0.2);
+        }
+
+        .status-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 2px solid #b86fff;
+            box-shadow: 0 0 15px rgba(184, 111, 255, 0.5);
+        }
+
+        .status-info {
+            text-align: left;
+        }
+
+        .status-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .verified {
+            color: #b86fff;
+            font-size: 12px;
+        }
+
+        .status-time {
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* Social Icons */
+        .social-section {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .social-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(40, 40, 40, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #fff;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .social-icon:hover {
+            background: rgba(184, 111, 255, 0.3);
+            border-color: #b86fff;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(184, 111, 255, 0.3);
+        }
+
+        .gallery-item {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            object-fit: cover;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.1);
+            border-color: #b86fff;
+            box-shadow: 0 10px 30px rgba(184, 111, 255, 0.3);
+        }
+
+        /* Music Player */
+        .music-player {
+            background: rgba(20, 20, 20, 0.7);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(184, 111, 255, 0.4);
+            border-radius: 30px;
+            padding: 30px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 
+                0 15px 50px rgba(0, 0, 0, 0.6),
+                0 0 30px rgba(184, 111, 255, 0.2);
+        }
+
+        .player-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .song-cover {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid #b86fff;
+        }
+
+        .song-info h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .song-info p {
+            font-size: 14px;
+            color: #999;
+        }
+
+        .progress-container {
+            margin-bottom: 20px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #b86fff, #a74aff);
+            width: 64%;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(184, 111, 255, 0.5);
+            transition: width 0.3s ease;
+        }
+
+        .time-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .control-btn {
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 10px;
+        }
+
+        .control-btn:hover {
+            color: #b86fff;
+            transform: scale(1.1);
+        }
+
+        .control-btn.play {
+            font-size: 32px;
+            background: linear-gradient(135deg, #b86fff, #a74aff);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 20px rgba(184, 111, 255, 0.4);
+        }
+
+        .control-btn.play:hover {
+            box-shadow: 0 8px 30px rgba(184, 111, 255, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .username { font-size: 32px; }
+            .avatar { width: 120px; height: 120px; }
+            .wings { font-size: 30px; }
+            .wing-left { left: -40px; }
+            .wing-right { right: -40px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background -->
+    <div class="background"></div>
+    <div class="overlay"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Avatar Section -->
+        <div class="avatar-section">
+            <div class="avatar-wrapper">
+                <div class="halo"></div>
+                <div class="wings wing-left">🕊️</div>
+                <img src="https://sf-static.upanhlaylink.com/img/image_2025112965289bfe712f652b16786e0ab1160fc4.jpg" alt="Avatar" class="avatar">
+                <div class="wings wing-right">🕊️</div>
+                <div class="sparkles sparkle-1">✨</div>
+                <div class="sparkles sparkle-2">✨</div>
+                <div class="sparkles sparkle-3">✨</div>
+            </div>
+            <h1 class="username">Grunt</h1>
+        </div>
+
+        <!-- Status Box -->
+        <div class="status-box">
+            <img src="https://sf-static.upanhlaylink.com/img/image_2025112965289bfe712f652b16786e0ab1160fc4.jpg" alt="Status Avatar" class="status-avatar">
+            <div class="status-info">
+                <div class="status-name">
+                    gruntmyinfo
+                    <i class="fas fa-check-circle verified"></i>
+                </div>
+                <div class="status-time">last seen 5 minutes ago</div>
+            </div>
+        </div>
+
+        <!-- Social Icons -->
+        <div class="social-section">
+            <a href="#" class="social-icon" title="YouTube">
+                <i class="fab fa-youtube"></i>
+            </a>
+            <a href="#" class="social-icon" title="Discord">
+                <i class="fab fa-discord"></i>
+            </a>
+            <a href="#" class="social-icon" title="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+        </div>
+
+        <!-- Music Player -->
+        <div class="music-player">
+            <!-- Hidden YouTube Player -->
+            <div id="youtube-player" style="display: none;"></div>
+            
+            <div class="player-header">
+                <img src="https://i.ytimg.com/vi/2ZAeEbddkog/maxresdefault.jpg" alt="Song Cover" class="song-cover">
+                <div class="song-info">
+                    <h3>her</h3>
+                    <p>chase atlantic</p>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress"></div>
+                </div>
+                <div class="time-info">
+                    <span class="current-time">0:00</span>
+                    <span class="total-time">2:49</span>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button class="control-btn prev-btn">
+                    <i class="fas fa-step-backward"></i>
+                </button>
+                <button class="control-btn play">
+                    <i class="fas fa-play"></i>
+                </button>
+                <button class="control-btn next-btn">
+                    <i class="fas fa-step-forward"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- YouTube IFrame API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+    
+    <script>
+        // Snow Effect
+        function createSnowflake() {
+            const snowflake = document.createElement('div');
+            snowflake.classList.add('snowflake');
+            snowflake.innerHTML = '❄';
+            snowflake.style.left = Math.random() * window.innerWidth + 'px';
+            snowflake.style.animationDuration = Math.random() * 3 + 5 + 's';
+            snowflake.style.opacity = Math.random() * 0.6 + 0.4;
+            snowflake.style.fontSize = Math.random() * 10 + 10 + 'px';
+            document.body.appendChild(snowflake);
+
+            setTimeout(() => {
+                snowflake.remove();
+            }, 8000);
+        }
+
+        setInterval(createSnowflake, 200);
+
+        // YouTube Player Setup
+        let player;
+        let isPlaying = false;
+        const playBtn = document.querySelector('.control-btn.play');
+        const progressBar = document.querySelector('.progress');
+        const progressBarContainer = document.querySelector('.progress-bar');
+        const currentTimeEl = document.querySelector('.current-time');
+        const totalTimeEl = document.querySelector('.total-time');
+
+        // Format time helper
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        // Initialize YouTube Player
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('youtube-player', {
+                height: '0',
+                width: '0',
+                videoId: '2ZAeEbddkog', // her - chase atlantic
+                playerVars: {
+                    'autoplay': 0,
+                    'controls': 0,
+                    'disablekb': 1,
+                    'fs': 0,
+                    'modestbranding': 1
+                },
+                events: {
+                    'onReady': onPlayerReady,
+                    'onStateChange': onPlayerStateChange
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            const duration = player.getDuration();
+            totalTimeEl.textContent = formatTime(duration);
+            
+            // Update progress bar
+            setInterval(() => {
+                if (player && player.getCurrentTime) {
+                    const currentTime = player.getCurrentTime();
+                    const duration = player.getDuration();
+                    const percentage = (currentTime / duration) * 100;
+                    progressBar.style.width = percentage + '%';
+                    currentTimeEl.textContent = formatTime(currentTime);
+                }
+            }, 100);
+        }
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.ENDED) {
+                isPlaying = false;
+                const icon = playBtn.querySelector('i');
+                icon.classList.remove('fa-pause');
+                icon.classList.add('fa-play');
+                progressBar.style.width = '0%';
+            }
+        }
+
+        // Play/Pause toggle
+        playBtn.addEventListener('click', () => {
+            if (!player) return;
+            
+            if (isPlaying) {
+                player.pauseVideo();
+            } else {
+                player.playVideo();
+            }
+            isPlaying = !isPlaying;
+            const icon = playBtn.querySelector('i');
+            icon.classList.toggle('fa-play');
+            icon.classList.toggle('fa-pause');
+        });
+
+        // Progress bar click to seek
+        progressBarContainer.addEventListener('click', (e) => {
+            if (!player) return;
+            
+            const bar = e.currentTarget;
+            const clickX = e.offsetX;
+            const width = bar.offsetWidth;
+            const percentage = clickX / width;
+            const duration = player.getDuration();
+            player.seekTo(percentage * duration, true);
+        });
+    </script>
+</body>
+</html>
