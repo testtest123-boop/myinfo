@@ -1,0 +1,12 @@
+{
+  "name": "grunt-profile",
+  "version": "1.0.0",
+  "description": "Grunt aesthetic profile page",
+  "main": "my-info.html",
+  "scripts": {
+    "start": "serve ."
+  },
+  "keywords": ["profile", "aesthetic"],
+  "author": "Grunt",
+  "license": "MIT"
+}
